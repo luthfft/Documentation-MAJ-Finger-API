@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAJ FInger API - Flow Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .nav {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav h3 {
+            margin-bottom: 15px;
+            color: #1e40af;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            background: #e0e7ff;
+            color: #1e40af;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #1e40af;
+            color: white;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .section-header h2 {
+            color: #1e40af;
+            font-size: 1.8em;
+        }
+        
+        .endpoint-card {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .method {
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            color: white;
+        }
+        
+        .method.get { background: #3b82f6; }
+        .method.post { background: #10b981; }
+        .method.put { background: #f59e0b; }
+        .method.delete { background: #ef4444; }
+        
+        .path {
+            font-family: 'Courier New', monospace;
+            color: #374151;
+            font-size: 15px;
+            flex: 1;
+        }
+        
+        .tag {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .flow-table th,
+        .flow-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .flow-table th {
+            background: #f3f4f6;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .flow-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge.success { background: #d1fae5; color: #065f46; }
+        .badge.error { background: #fee2e2; color: #991b1b; }
+        .badge.info { background: #dbeafe; color: #1e40af; }
+        .badge.warning { background: #fef3c7; color: #92400e; }
+        
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            margin: 20px 0;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #6b7280;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .toc {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .toc h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            padding: 5px 0;
+        }
+        
+        .toc a {
+            color: #374151;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .toc a:hover {
+            color: #1e40af;
+        }
+        
+        .security-note {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .security-note h4 {
+            color: #991b1b;
+            margin-bottom: 8px;
+        }
+
+        @media print {
+            .nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ZKTeco Device API</h1>
+        <p>Complete Flow Documentation & Integration Guide</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">Version 1.0.0 | RESTful API for fingerprint device management and access control</p>
+    </div>
+    
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav">
+            <h3>📑 Quick Navigation</h3>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#auth" class="nav-link">Authentication</a>
+                <a href="#attendance" class="nav-link">Attendance</a>
+                <a href="#device-mgmt" class="nav-link">Device Management</a>
+                <a href="#device-ops" class="nav-link">Device Operations</a>
+                <a href="#user-mgmt" class="nav-link">User Management</a>
+                <a href="#door-control" class="nav-link">Door Control</a>
+                <a href="#queue" class="nav-link">Queue & Cache</a>
+            </div>
+        </div>
+        
+        <!-- Overview Section -->
+        <div id="overview" class="section">
+            <div class="section-header">
+                <h2>📖 API Overview</h2>
+            </div>
+            
+            <p>ZKTeco Device API menyediakan interface RESTful untuk mengelola fingerprint devices, user management, attendance tracking, dan door access control.</p>
+            
+            <div class="info-box">
+                <h4>🔑 Key Features:</h4>
+                <ul>
+                    <li>JWT-based authentication dengan access & refresh tokens</li>
+                    <li>Real-time device communication dengan ZKTeco fingerprint readers</li>
+                    <li>Async job processing menggunakan queue system</li>
+                    <li>Caching untuk optimasi performance</li>
+                    <li>Comprehensive attendance & user management</li>
+                </ul>
+            </div>
+            
+            <h3>📊 API Statistics</h3>
+            <div class="flow-table">
+                <table class="flow-table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Endpoints</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">JWT Auth Users</span></td>
+                        <td>2</td>
+                        <td>Authentication & user registration</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">Attendance</span></td>
+                        <td>5</td>
+                        <td>Attendance records management</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">Device Management</span></td>
+                        <td>3</td>
+                        <td>Device CRUD operations</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">Device Operations</span></td>
+                        <td>3</td>
+                        <td>Device control (restart, info, etc)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">Door Control</span></td>
+                        <td>1</td>
+                        <td>Door unlock operations</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">User Management</span></td>
+                        <td>6</td>
+                        <td>User sync & management on devices</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">Queue & Cache</span></td>
+                        <td>2</td>
+                        <td>Background jobs & cache management</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- System Architecture -->
+        <div id="architecture" class="section">
+            <div class="section-header">
+                <h2>🏗️ System Architecture</h2>
+            </div>
+            
+            <h3>High-Level Architecture</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    Client[Client Application]
+    API[API Server<br/>Node.js/Express]
+    Auth[Auth Service<br/>JWT]
+    Queue[Queue System<br/>Bull/Redis]
+    Cache[Redis Cache]
+    DB[(PostgreSQL<br/>Database)]
+    Device[ZKTeco Device<br/>Fingerprint Reader]
+    
+    Client -->|HTTP/REST| API
+    API --> Auth
+    API --> Queue
+    API --> Cache
+    API --> DB
+    Queue -->|Background Jobs| Device
+    API -->|Direct Communication| Device
+    Device -->|Attendance Data| API
+    
+    style Client fill:#e1f5ff
+    style API fill:#dbeafe
+    style Auth fill:#fef3c7
+    style Queue fill:#d1fae5
+    style Cache fill:#fee2e2
+    style DB fill:#e0e7ff
+    style Device fill:#fce7f3
+                </div>
+            </div>
+            
+            <h3>Request Flow Architecture</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant C as Client
+    participant G as API Gateway
+    participant A as Auth Middleware
+    participant Ctrl as Controller
+    participant Svc as Service Layer
+    participant Q as Queue
+    participant Cache as Redis Cache
+    participant DB as Database
+    participant Dev as ZKTeco Device
+    
+    C->>G: HTTP Request
+    G->>A: Verify JWT Token
+    alt Valid Token
+        A->>Ctrl: Authenticated Request
+        Ctrl->>Svc: Business Logic
+        
+        alt Check Cache
+            Svc->>Cache: Get Cached Data
+            Cache-->>Svc: Return if exists
+        end
+        
+        alt Direct Operation
+            Svc->>Dev: TCP Connection
+            Dev-->>Svc: Device Response
+        end
+        
+        alt Async Operation
+            Svc->>Q: Add Job to Queue
+            Q-->>Svc: Job Queued
+            Note over Q,Dev: Background Processing
+            Q->>Dev: Process Job
+            Dev-->>Q: Result
+            Q->>DB: Save Result
+        end
+        
+        Svc->>DB: Persist Data
+        DB-->>Svc: Success
+        Svc-->>Ctrl: Result
+        Ctrl-->>G: Format Response
+        G-->>C: JSON Response
+    else Invalid Token
+        A-->>G: 401 Unauthorized
+        G-->>C: Error Response
+    end
+                </div>
+            </div>
+        </div>
+        
+        <!-- Authentication Section -->
+        <div id="auth" class="section">
+            <div class="section-header">
+                <h2>🔐 Authentication Flow</h2>
+            </div>
+            
+            <!-- Login Endpoint -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/auth/login</span>
+                    <span class="tag">JWT Auth Users</span>
+                </div>
+                <p><strong>Summary:</strong> Authenticate user and get JWT tokens</p>
+            </div>
+            
+            <h3>🔄 Login Flow Diagram</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant AuthService
+    participant Database
+    participant JWT
+    
+    Client->>API: POST /api/v1/auth/login
+    Note over Client,API: {email, password}
+    
+    API->>AuthService: authenticate(credentials)
+    AuthService->>Database: SELECT user WHERE email
+    
+    alt User Found
+        Database-->>AuthService: User data
+        AuthService->>AuthService: bcrypt.compare(password)
+        
+        alt Password Valid
+            AuthService->>JWT: generateAccessToken(user)
+            JWT-->>AuthService: access_token (1h)
+            AuthService->>JWT: generateRefreshToken(user)
+            JWT-->>AuthService: refresh_token (7d)
+            AuthService-->>API: tokens + user data
+            API-->>Client: 200 OK + tokens
+        else Password Invalid
+            AuthService-->>API: Invalid password
+            API-->>Client: 401 Unauthorized
+        end
+    else User Not Found
+        Database-->>AuthService: null
+        AuthService-->>API: User not found
+        API-->>Client: 401 Unauthorized
+    end
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('login', 'request')">Request</button>
+                <button class="tab" onclick="showTab('login', 'success')">Success Response</button>
+                <button class="tab" onclick="showTab('login', 'error')">Error Response</button>
+            </div>
+            
+            <div id="login-request" class="tab-content active">
+                <h4>Request Body</h4>
+                <div class="code-block">
+<pre>{
+  "email": "danish@example.com",
+  "password": "danish123"
+}</pre>
+                </div>
+            </div>
+            
+            <div id="login-success" class="tab-content">
+                <h4>Success Response (200 OK)</h4>
+                <div class="code-block">
+<pre>{
+  "status": true,
+  "message": "Login successful",
+  "data": {
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "token_type": "Bearer",
+    "expires_in": 3600
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <div id="login-error" class="tab-content">
+                <h4>Error Response (401 Unauthorized)</h4>
+                <div class="code-block">
+<pre>{
+  "status": false,
+  "message": "Invalid credentials",
+  "error": {
+    "code": "INVALID_CREDENTIALS",
+    "details": "Email atau password salah"
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <h3>📋 Data Flow Table</h3>
+            <table class="flow-table">
+                <tr>
+                    <th>Step</th>
+                    <th>Component</th>
+                    <th>Input</th>
+                    <th>Processing</th>
+                    <th>Output</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Client</td>
+                    <td>email, password</td>
+                    <td>Send POST request</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Validation</td>
+                    <td>Request body</td>
+                    <td>Validate email format</td>
+                    <td>Validated data</td>
+                    <td><span class="badge success">200</span> / <span class="badge error">400</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Database</td>
+                    <td>Email</td>
+                    <td>Find user by email</td>
+                    <td>User object</td>
+                    <td><span class="badge success">Found</span> / <span class="badge error">404</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Auth Service</td>
+                    <td>password + hash</td>
+                    <td>bcrypt.compare()</td>
+                    <td>Boolean</td>
+                    <td><span class="badge success">Match</span> / <span class="badge error">401</span></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>JWT Service</td>
+                    <td>User data</td>
+                    <td>Generate tokens</td>
+                    <td>access + refresh tokens</td>
+                    <td><span class="badge success">200</span></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Response</td>
+                    <td>Tokens</td>
+                    <td>Format response</td>
+                    <td>JSON response</td>
+                    <td><span class="badge success">200</span></td>
+                </tr>
+            </table>
+            
+            <div class="security-note">
+                <h4>🔒 Security Notes:</h4>
+                <ul>
+                    <li>Password di-hash menggunakan bcrypt sebelum disimpan</li>
+                    <li>Access token expires dalam 1 jam (3600 seconds)</li>
+                    <li>Refresh token expires dalam 7 hari</li>
+                    <li>Token disimpan di client (localStorage/cookies)</li>
+                    <li>Gunakan HTTPS untuk semua API calls</li>
+                </ul>
+            </div>
+            
+            <!-- Register Endpoint -->
+            <div class="endpoint-card" style="margin-top: 30px;">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/auth/register</span>
+                    <span class="tag">JWT Auth Users</span>
+                    <span class="badge warning">Admin Only</span>
+                </div>
+                <p><strong>Summary:</strong> Register new user (Admin only)</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ Authorization Required:</h4>
+                <p>Endpoint ini memerlukan authentication token dengan role "admin"</p>
+                <p><strong>Header:</strong> <code>Authorization: Bearer {admin_access_token}</code></p>
+            </div>
+            
+            <h3>🔄 Registration Flow Diagram</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Admin
+    participant API
+    participant AuthMiddleware
+    participant AuthService
+    participant Database
+    
+    Admin->>API: POST /api/v1/auth/register
+    Note over Admin,API: Authorization: Bearer token
+    
+    API->>AuthMiddleware: Verify JWT
+    alt Valid Admin Token
+        AuthMiddleware->>AuthMiddleware: Check role === 'admin'
+        alt Is Admin
+            AuthMiddleware->>AuthService: createUser(data)
+            AuthService->>Database: Check email exists
+            
+            alt Email Available
+                AuthService->>AuthService: bcrypt.hash(password)
+                AuthService->>Database: INSERT user
+                Database-->>AuthService: user_id
+                AuthService-->>API: User created
+                API-->>Admin: 201 Created
+            else Email Exists
+                Database-->>AuthService: User exists
+                AuthService-->>API: Duplicate email
+                API-->>Admin: 400 Bad Request
+            end
+        else Not Admin
+            AuthMiddleware-->>API: Forbidden
+            API-->>Admin: 403 Forbidden
+        end
+    else Invalid Token
+        AuthMiddleware-->>API: Unauthorized
+        API-->>Admin: 401 Unauthorized
+    end
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('register', 'request')">Request</button>
+                <button class="tab" onclick="showTab('register', 'success')">Success Response</button>
+                <button class="tab" onclick="showTab('register', 'errors')">Error Scenarios</button>
+            </div>
+            
+            <div id="register-request" class="tab-content active">
+                <h4>Request Body</h4>
+                <div class="code-block">
+<pre>{
+  "username": "danish",
+  "email": "danish@example.com",
+  "password": "password123",
+  "role": "user"
+}</pre>
+                </div>
+            </div>
+            
+            <div id="register-success" class="tab-content">
+                <h4>Success Response (201 Created)</h4>
+                <div class="code-block">
+<pre>{
+  "status": true,
+  "message": "User berhasil didaftarkan",
+  "data": {
+    "id": 1,
+    "username": "john_doe",
+    "email": "john@example.com",
+    "role": "user"
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <div id="register-errors" class="tab-content">
+                <h4>Error Scenarios</h4>
+                <table class="flow-table">
+                    <tr>
+                        <th>Status</th>
+                        <th>Scenario</th>
+                        <th>Response</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge error">400</span></td>
+                        <td>Validation error (missing fields, invalid email)</td>
+                        <td>Validation error details</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge error">401</span></td>
+                        <td>No token or invalid token</td>
+                        <td>Unauthorized - Not logged in</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge error">403</span></td>
+                        <td>User is not admin</td>
+                        <td>Forbidden - Not an admin</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Attendance Section -->
+        <div id="attendance" class="section">
+            <div class="section-header">
+                <h2>📅 Attendance Management</h2>
+            </div>
+            
+            <p>Attendance endpoints untuk mengelola data absensi dari ZKTeco device.</p>
+            
+            <!-- Get All Attendance -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/attendance</span>
+                    <span class="tag">Attendance</span>
+                </div>
+                <p><strong>Summary:</strong> Get all attendance records (cached)</p>
+            </div>
+            
+            <h3>🔄 Get Attendance Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant Cache
+    participant Database
+    
+    Client->>API: GET /api/v1/attendance
+    API->>Cache: Check cache key
+    
+    alt Cache Hit
+        Cache-->>API: Return cached data
+        API-->>Client: 200 OK (from cache)
+    else Cache Miss
+        API->>Database: SELECT * FROM attendance
+        Database-->>API: Attendance records
+        API->>Cache: Store in cache (TTL: 5min)
+        API-->>Client: 200 OK (from DB)
+    end
+                </div>
+            </div>
+            
+            <!-- Sync Attendance -->
+            <div class="endpoint-card" style="margin-top: 30px;">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/attendance/device/{deviceId}/sync</span>
+                    <span class="tag">Attendance</span>
+                    <span class="badge info">Async Job</span>
+                </div>
+                <p><strong>Summary:</strong> Sync attendance from device to database (ASYNC with queue)</p>
+            </div>
+            
+            <h3>🔄 Async Sync Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant Queue
+    participant Worker
+    participant Device
+    participant Database
+    participant Cache
+    
+    Client->>API: POST /attendance/device/1/sync
+    API->>Queue: Add sync job
+    Queue-->>API: Job ID
+    API-->>Client: 202 Accepted (job queued)
+    
+    Note over Queue,Worker: Background Processing
+    Queue->>Worker: Process job
+    Worker->>Device: TCP Connect
+    Device-->>Worker: Attendance logs
+    
+    loop For each log
+        Worker->>Database: INSERT/UPDATE attendance
+    end
+    
+    Worker->>Cache: Clear attendance cache
+    Worker->>Queue: Job completed
+    Queue->>Database: Update job status
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>💡 Async Processing Benefits:</h4>
+                <ul>
+                    <li>Non-blocking - API responds immediately dengan status 202</li>
+                    <li>Reliable - Job retry mechanism jika gagal</li>
+                    <li>Scalable - Multiple workers dapat memproses job secara parallel</li>
+                    <li>Monitoring - Track job progress via queue stats endpoint</li>
+                </ul>
+            </div>
+            
+            <h3>📋 Response Examples</h3>
+            <div class="code-block">
+<pre>// 202 Accepted Response
+{
+  "status": true,
+  "message": "Sync job queued successfully",
+  "data": {
+    "job_id": "sync-device-1-20240205143000",
+    "device_id": 1,
+    "status": "queued",
+    "queued_at": "2024-02-05T14:30:00Z"
+  }
+}</pre>
+            </div>
+        </div>
+        
+        <!-- Device Management Section -->
+        <div id="device-mgmt" class="section">
+            <div class="section-header">
+                <h2>📱 Device Management</h2>
+            </div>
+            
+            <!-- Create Device -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/devices</span>
+                    <span class="tag">Device Management</span>
+                </div>
+                <p><strong>Summary:</strong> Create new device configuration</p>
+            </div>
+            
+            <h3>🔄 Device Registration Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant Validation
+    participant DeviceService
+    participant Database
+    participant ZKDevice
+    
+    Client->>API: POST /api/v1/devices
+    Note over Client,API: {name, ip, port, password}
+    
+    API->>Validation: Validate request
+    alt Valid Data
+        Validation->>DeviceService: createDevice(data)
+        DeviceService->>Database: Check IP exists
+        
+        alt IP Available
+            DeviceService->>ZKDevice: Test Connection
+            alt Connection OK
+                ZKDevice-->>DeviceService: Connected
+                DeviceService->>Database: INSERT device
+                Database-->>DeviceService: device_id
+                DeviceService-->>API: Device created
+                API-->>Client: 201 Created
+            else Connection Failed
+                ZKDevice-->>DeviceService: Connection error
+                DeviceService-->>API: Cannot reach device
+                API-->>Client: 400 Bad Request
+            end
+        else IP Exists
+            Database-->>DeviceService: Duplicate IP
+            DeviceService-->>API: IP already registered
+            API-->>Client: 409 Conflict
+        end
+    else Invalid Data
+        Validation-->>API: Validation errors
+        API-->>Client: 400 Bad Request
+    end
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('device', 'request')">Request</button>
+                <button class="tab" onclick="showTab('device', 'success')">Success Response</button>
+                <button class="tab" onclick="showTab('device', 'flow')">Data Flow</button>
+            </div>
+            
+            <div id="device-request" class="tab-content active">
+                <h4>Request Body</h4>
+                <div class="code-block">
+<pre>{
+  "name": "Main Entrance Reader",
+  "ip": "192.168.1.100",
+  "port": 4370,
+  "password": "",
+  "location": "Building A - Main Entrance",
+  "serial_number": "ZKT-001-2024"
+}</pre>
+                </div>
+            </div>
+            
+            <div id="device-success" class="tab-content">
+                <h4>Success Response (201 Created)</h4>
+                <div class="code-block">
+<pre>{
+  "status": true,
+  "message": "Device registered successfully",
+  "data": {
+    "id": 1,
+    "name": "Main Entrance Reader",
+    "ip": "192.168.1.100",
+    "port": 4370,
+    "location": "Building A - Main Entrance",
+    "serial_number": "ZKT-001-2024",
+    "status": "active",
+    "is_connected": true,
+    "created_at": "2024-02-05T14:30:00Z"
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <div id="device-flow" class="tab-content">
+                <h4>Data Flow Table</h4>
+                <table class="flow-table">
+                    <tr>
+                        <th>Step</th>
+                        <th>Action</th>
+                        <th>Success</th>
+                        <th>Failure</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Validate request data</td>
+                        <td>Continue</td>
+                        <td>400 - Validation error</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Check IP uniqueness</td>
+                        <td>Continue</td>
+                        <td>409 - IP already exists</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Test TCP connection</td>
+                        <td>Continue</td>
+                        <td>400 - Cannot reach device</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Insert to database</td>
+                        <td>201 Created</td>
+                        <td>500 - Database error</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Device Operations Section -->
+        <div id="device-ops" class="section">
+            <div class="section-header">
+                <h2>⚙️ Device Operations</h2>
+            </div>
+            
+            <!-- Device Info -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/devices/{deviceId}/info</span>
+                    <span class="tag">Device Operations</span>
+                </div>
+                <p><strong>Summary:</strong> Get device information and status</p>
+            </div>
+            
+            <h3>🔄 Device Info Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant Database
+    participant ZKDevice
+    
+    Client->>API: GET /devices/1/info
+    API->>Database: Get device config
+    Database-->>API: Device data
+    API->>ZKDevice: Connect via TCP
+    
+    alt Connected
+        ZKDevice-->>API: Device info
+        Note over API,ZKDevice: Model, firmware,<br/>capacity, users count
+        API-->>Client: 200 OK + device info
+    else Connection Failed
+        ZKDevice-->>API: Connection timeout
+        API-->>Client: 503 Service Unavailable
+    end
+                </div>
+            </div>
+            
+            <!-- Restart Device -->
+            <div class="endpoint-card" style="margin-top: 30px;">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/devices/{deviceId}/restart</span>
+                    <span class="tag">Device Operations</span>
+                    <span class="badge warning">Critical Operation</span>
+                </div>
+                <p><strong>Summary:</strong> Restart the device</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ Critical Operation Warning:</h4>
+                <p>Restarting device akan:</p>
+                <ul>
+                    <li>Disconnect semua active connections</li>
+                    <li>Device offline selama ~30-60 seconds</li>
+                    <li>Attendance logging ter-interupsi sementara</li>
+                    <li>Requires admin authorization</li>
+                </ul>
+            </div>
+            
+            <h3>🔄 Restart Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Admin
+    participant API
+    participant Database
+    participant ZKDevice
+    participant NotifService
+    
+    Admin->>API: POST /devices/1/restart
+    API->>Database: Get device info
+    Database-->>API: Device config
+    API->>ZKDevice: Send restart command
+    
+    alt Restart Success
+        ZKDevice-->>API: Restart initiated
+        API->>Database: Log restart event
+        API->>NotifService: Send admin notification
+        NotifService-->>Admin: Email/Slack notification
+        API-->>Admin: 200 OK
+        Note over ZKDevice: Device rebooting...
+        Note over ZKDevice: ~30-60 seconds
+        Note over ZKDevice: Device back online
+    else Restart Failed
+        ZKDevice-->>API: Command failed
+        API->>Database: Log error
+        API-->>Admin: 500 Internal Error
+    end
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Management Section -->
+        <div id="user-mgmt" class="section">
+            <div class="section-header">
+                <h2>👥 User Management</h2>
+            </div>
+            
+            <!-- Add User to Device -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/users/device/{deviceId}</span>
+                    <span class="tag">User Management</span>
+                </div>
+                <p><strong>Summary:</strong> Add user to device</p>
+            </div>
+            
+            <h3>🔄 Add User Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant API
+    participant Database
+    participant ZKDevice
+    participant FingerprintScanner
+    
+    Client->>API: POST /users/device/1
+    Note over Client,API: {user_id, name}
+    
+    API->>Database: Check user exists
+    alt User New
+        API->>ZKDevice: Connect
+        ZKDevice-->>API: Connected
+        API->>ZKDevice: Add user command
+        ZKDevice->>FingerprintScanner: Register fingerprint
+        
+        Note over FingerprintScanner: User scans finger<br/>3 times for enrollment
+        
+        alt Fingerprint Enrolled
+            FingerprintScanner-->>ZKDevice: Template saved
+            ZKDevice-->>API: User added
+            API->>Database: Save user mapping
+            API-->>Client: 201 Created
+        else Enrollment Failed
+            FingerprintScanner-->>ZKDevice: Quality too low
+            ZKDevice-->>API: Enrollment failed
+            API-->>Client: 400 Bad Request
+        end
+    else User Exists
+        Database-->>API: User found
+        API-->>Client: 409 Conflict
+    end
+                </div>
+            </div>
+            
+            <!-- Sync Users -->
+            <div class="endpoint-card" style="margin-top: 30px;">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/users/device/{deviceId}/syncUserToDb</span>
+                    <span class="tag">User Management</span>
+                    <span class="badge info">Async Job</span>
+                </div>
+                <p><strong>Summary:</strong> Sync users from device to database (ASYNC with queue)</p>
+            </div>
+            
+            <h3>🔄 User Sync Flow (Async)</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    Start([Client Request]) --> Queue[Add to Queue]
+    Queue --> Worker[Background Worker]
+    Worker --> Connect[Connect to Device]
+    Connect --> GetUsers[Get All Users]
+    GetUsers --> Loop{For Each User}
+    
+    Loop -->|Process| CheckDB[Check if User Exists in DB]
+    CheckDB -->|New| Insert[INSERT User]
+    CheckDB -->|Existing| Update[UPDATE User]
+    
+    Insert --> Next{More Users?}
+    Update --> Next
+    Next -->|Yes| Loop
+    Next -->|No| ClearCache[Clear User Cache]
+    ClearCache --> Complete([Job Complete])
+    
+    Queue -.->|Immediate Response| Client([202 Accepted])
+    
+    style Start fill:#e1f5ff
+    style Client fill:#d1fae5
+    style Queue fill:#fef3c7
+    style Worker fill:#dbeafe
+    style Complete fill:#d1fae5
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>💡 Sync Strategy:</h4>
+                <ul>
+                    <li><strong>Async Processing:</strong> Large user sync di-process di background</li>
+                    <li><strong>Batch Operations:</strong> Insert/update users in batches (100 users/batch)</li>
+                    <li><strong>Progress Tracking:</strong> Monitor via <code>GET /api/v1/queue/stats</code></li>
+                    <li><strong>Error Recovery:</strong> Failed jobs automatically retry 3 times</li>
+                </ul>
+            </div>
+            
+            <h3>📊 Sync Performance</h3>
+            <table class="flow-table">
+                <tr>
+                    <th>User Count</th>
+                    <th>Estimated Time</th>
+                    <th>Processing Method</th>
+                </tr>
+                <tr>
+                    <td>1-100</td>
+                    <td>~5-10 seconds</td>
+                    <td>Sync (real-time)</td>
+                </tr>
+                <tr>
+                    <td>100-1000</td>
+                    <td>~1-2 minutes</td>
+                    <td>Async (background)</td>
+                </tr>
+                <tr>
+                    <td>1000+</td>
+                    <td>~5-10 minutes</td>
+                    <td>Async with batching</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Door Control Section -->
+        <div id="door-control" class="section">
+            <div class="section-header">
+                <h2>🚪 Door Control</h2>
+            </div>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/devices/{deviceId}/unlock</span>
+                    <span class="tag">Door Control</span>
+                    <span class="badge warning">Security Sensitive</span>
+                </div>
+                <p><strong>Summary:</strong> Unlock door remotely</p>
+            </div>
+            
+            <div class="security-note">
+                <h4>🔒 Security Requirements:</h4>
+                <ul>
+                    <li>Requires admin authorization</li>
+                    <li>All unlock events are logged with timestamp & user</li>
+                    <li>Audit trail stored for compliance</li>
+                    <li>Rate limited to prevent abuse (10 requests/minute)</li>
+                </ul>
+            </div>
+            
+            <h3>🔄 Remote Unlock Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Admin
+    participant API
+    participant RateLimit
+    participant AuditLog
+    participant ZKDevice
+    participant DoorLock
+    participant NotifService
+    
+    Admin->>API: POST /devices/1/unlock
+    API->>RateLimit: Check rate limit
+    
+    alt Within Limit
+        RateLimit-->>API: OK
+        API->>AuditLog: Log unlock attempt
+        AuditLog-->>API: Logged
+        
+        API->>ZKDevice: Send unlock command
+        ZKDevice->>DoorLock: Trigger relay
+        DoorLock-->>ZKDevice: Unlocked
+        
+        Note over DoorLock: Door unlocked<br/>for 5 seconds
+        
+        ZKDevice-->>API: Success
+        API->>AuditLog: Update status: success
+        API->>NotifService: Alert security team
+        API-->>Admin: 200 OK
+        
+        Note over DoorLock: Auto-lock after<br/>5 seconds
+    else Rate Limit Exceeded
+        RateLimit-->>API: Too many requests
+        API-->>Admin: 429 Too Many Requests
+    end
+                </div>
+            </div>
+            
+            <h3>📋 Unlock Response</h3>
+            <div class="code-block">
+<pre>// Success Response
+{
+  "status": true,
+  "message": "Door unlocked successfully",
+  "data": {
+    "device_id": 1,
+    "unlock_time": "2024-02-05T14:30:00Z",
+    "unlocked_by": "admin@example.com",
+    "auto_lock_in": 5,
+    "audit_id": "AUD-20240205-001"
+  }
+}</pre>
+            </div>
+        </div>
+        
+        <!-- Queue & Cache Section -->
+        <div id="queue" class="section">
+            <div class="section-header">
+                <h2>⚡ Queue & Cache Management</h2>
+            </div>
+            
+            <!-- Queue Stats -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/v1/queue/stats</span>
+                    <span class="tag">Queue</span>
+                </div>
+                <p><strong>Summary:</strong> Get queue statistics</p>
+            </div>
+            
+            <h3>📊 Queue Monitoring</h3>
+            <div class="code-block">
+<pre>// Queue Stats Response
+{
+  "status": true,
+  "data": {
+    "total_jobs": 1523,
+    "active": 5,
+    "waiting": 12,
+    "completed": 1480,
+    "failed": 26,
+    "queues": {
+      "attendance-sync": {
+        "active": 2,
+        "waiting": 5,
+        "completed": 850
+      },
+      "user-sync": {
+        "active": 3,
+        "waiting": 7,
+        "completed": 630
+      }
+    },
+    "last_updated": "2024-02-05T14:30:00Z"
+  }
+}</pre>
+            </div>
+            
+            <!-- Clear Cache -->
+            <div class="endpoint-card" style="margin-top: 30px;">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/cache/clear</span>
+                    <span class="tag">Cache</span>
+                </div>
+                <p><strong>Summary:</strong> Clear all cache</p>
+            </div>
+            
+            <h3>🔄 Cache Clear Flow</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    A[Admin Request] --> B{Auth Check}
+    B -->|Admin| C[Clear Redis Cache]
+    B -->|Not Admin| D[403 Forbidden]
+    C --> E[Log Cache Clear]
+    E --> F[Notify Services]
+    F --> G[200 Success]
+    
+    style A fill:#e1f5ff
+    style C fill:#fee2e2
+    style G fill:#d1fae5
+    style D fill:#fee2e2
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ Cache Clear Impact:</h4>
+                <p>Clearing cache akan:</p>
+                <ul>
+                    <li>Temporary performance degradation (data akan di-fetch dari DB)</li>
+                    <li>Cache akan rebuild gradually seiring requests masuk</li>
+                    <li>Useful setelah bulk updates atau data migrations</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Best Practices Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>✅ Best Practices & Integration Guide</h2>
+            </div>
+            
+            <h3>🔐 Authentication Flow</h3>
+            <div class="info-box">
+                <h4>Recommended Auth Implementation:</h4>
+                <ol>
+                    <li>User logs in → Receive access_token & refresh_token</li>
+                    <li>Store tokens securely (HttpOnly cookies recommended)</li>
+                    <li>Include access_token in Authorization header: <code>Bearer {token}</code></li>
+                    <li>When access_token expires (401), use refresh_token to get new tokens</li>
+                    <li>If refresh_token expires, redirect to login</li>
+                </ol>
+            </div>
+            
+            <h3>⚡ Performance Optimization</h3>
+            <table class="flow-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Strategy</th>
+                    <th>Benefit</th>
+                </tr>
+                <tr>
+                    <td>Caching</td>
+                    <td>Redis cache with 5-minute TTL</td>
+                    <td>Reduce DB load, faster response</td>
+                </tr>
+                <tr>
+                    <td>Async Processing</td>
+                    <td>Queue-based background jobs</td>
+                    <td>Non-blocking operations, better UX</td>
+                </tr>
+                <tr>
+                    <td>Batch Operations</td>
+                    <td>Process 100 records/batch</td>
+                    <td>Efficient bulk operations</td>
+                </tr>
+                <tr>
+                    <td>Connection Pooling</td>
+                    <td>Reuse device connections</td>
+                    <td>Reduce connection overhead</td>
+                </tr>
+            </table>
+            
+            <h3>🔒 Security Checklist</h3>
+            <div class="security-note">
+                <h4>Security Implementation Checklist:</h4>
+                <ul>
+                    <li>✅ Always use HTTPS in production</li>
+                    <li>✅ Implement rate limiting on all endpoints</li>
+                    <li>✅ Validate and sanitize all inputs</li>
+                    <li>✅ Log all security-sensitive operations</li>
+                    <li>✅ Use environment variables for secrets</li>
+                    <li>✅ Implement CORS properly</li>
+                    <li>✅ Regular security audits</li>
+                </ul>
+            </div>
+            
+            <h3>📝 Error Handling</h3>
+            <div class="code-block">
+<pre>// Standard Error Response Format
+{
+  "status": false,
+  "message": "Human-readable error message",
+  "error": {
+    "code": "ERROR_CODE",
+    "type": "ErrorType",
+    "details": "Additional error details or validation errors"
+  },
+  "metadata": {
+    "timestamp": "2024-02-05T14:30:00Z",
+    "request_id": "req-abc-123",
+    "api_version": "v1"
+  }
+}</pre>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="section" style="text-align: center; background: #f8fafc;">
+            <p>📚 <strong>MAJ Finger API Documentation</strong></p>
+            <p>Version 1.0.1</p>
+            <p>For API support, contact: <a href="mailto:danishluthfim@gmail.com">danishluthfim@gmail.com</a></p>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                useMaxWidth: true,
+                actorMargin: 50
+            }
+        });
+        
+        function showTab(section, tabId) {
+            // Hide all tabs in this section
+            const sectionPrefix = section + '-';
+            document.querySelectorAll(`[id^="${sectionPrefix}"]`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from all tabs buttons
+            event.target.parentElement.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(sectionPrefix + tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
