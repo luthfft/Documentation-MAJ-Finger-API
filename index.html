@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAJ FInger API - Flow Documentation</title>
+    <title>ZKTeco Device API - Flow Documentation</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         * {
@@ -21,31 +21,31 @@
         .header {
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .header h1 {
-            font-size: 2.5em;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             margin-bottom: 10px;
         }
         
         .header p {
-            font-size: 1.2em;
+            font-size: clamp(0.9rem, 3vw, 1.2rem);
             opacity: 0.9;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
         
         .nav {
             background: white;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: sticky;
@@ -53,25 +53,44 @@
             z-index: 100;
         }
         
-        .nav h3 {
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+        }
+        
+        .nav h3 {
             color: #1e40af;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+        
+        .nav-toggle {
+            display: none;
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
         }
         
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
         
         .nav-link {
-            padding: 8px 16px;
+            padding: 8px 12px;
             background: #e0e7ff;
             color: #1e40af;
             text-decoration: none;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
             transition: all 0.3s;
+            white-space: nowrap;
         }
         
         .nav-link:hover {
@@ -79,10 +98,31 @@
             color: white;
         }
         
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                margin-top: 15px;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
         .section {
             background: white;
-            padding: 30px;
-            margin: 20px 0;
+            padding: 20px;
+            margin: 15px 0;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -90,36 +130,37 @@
         .section-header {
             border-bottom: 3px solid #3b82f6;
             padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .section-header h2 {
             color: #1e40af;
-            font-size: 1.8em;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
         }
         
         .endpoint-card {
             background: #f8fafc;
             border-left: 4px solid #3b82f6;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             border-radius: 4px;
         }
         
         .endpoint-header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
         
         .method {
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 4px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: clamp(0.7rem, 2vw, 0.8125rem);
             color: white;
+            flex-shrink: 0;
         }
         
         .method.get { background: #3b82f6; }
@@ -130,54 +171,91 @@
         .path {
             font-family: 'Courier New', monospace;
             color: #374151;
-            font-size: 15px;
+            font-size: clamp(0.75rem, 2.5vw, 0.9375rem);
+            word-break: break-all;
             flex: 1;
+            min-width: 0;
         }
         
         .tag {
             background: #dbeafe;
             color: #1e40af;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 3px;
-            font-size: 12px;
+            font-size: clamp(0.65rem, 2vw, 0.75rem);
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 640px) {
+            .section {
+                padding: 15px;
+                margin: 10px 0;
+            }
+            
+            .endpoint-card {
+                padding: 12px;
+            }
+            
+            .endpoint-header {
+                gap: 8px;
+            }
         }
         
         .diagram-container {
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 4px;
             border: 1px solid #e5e7eb;
             margin: 15px 0;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .diagram-container .mermaid {
+            min-width: 300px;
         }
         
         .code-block {
             background: #1f2937;
             color: #e5e7eb;
-            padding: 15px;
+            padding: 12px;
             border-radius: 4px;
             overflow-x: auto;
             margin: 10px 0;
+            -webkit-overflow-scrolling: touch;
         }
         
         .code-block pre {
             margin: 0;
             font-family: 'Courier New', monospace;
-            font-size: 13px;
+            font-size: clamp(0.7rem, 2vw, 0.8125rem);
+            white-space: pre;
         }
         
         .flow-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
-            font-size: 14px;
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .flow-table thead,
+        .flow-table tbody,
+        .flow-table tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
         }
         
         .flow-table th,
         .flow-table td {
-            padding: 12px;
+            padding: 10px 8px;
             text-align: left;
             border: 1px solid #e5e7eb;
+            word-wrap: break-word;
         }
         
         .flow-table th {
@@ -190,11 +268,68 @@
             background: #f9fafb;
         }
         
+        @media (max-width: 768px) {
+            .diagram-container {
+                padding: 10px;
+            }
+            
+            .code-block {
+                padding: 10px;
+                font-size: 0.7rem;
+            }
+            
+            /* Stack table on mobile for better readability */
+            .flow-table.mobile-stack {
+                display: block;
+            }
+            
+            .flow-table.mobile-stack thead {
+                display: none;
+            }
+            
+            .flow-table.mobile-stack tbody,
+            .flow-table.mobile-stack tr,
+            .flow-table.mobile-stack td {
+                display: block;
+                width: 100%;
+            }
+            
+            .flow-table.mobile-stack tr {
+                margin-bottom: 15px;
+                border: 1px solid #e5e7eb;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            
+            .flow-table.mobile-stack td {
+                text-align: left;
+                padding-left: 50%;
+                position: relative;
+                border: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .flow-table.mobile-stack td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: 600;
+                color: #374151;
+            }
+            
+            .flow-table.mobile-stack td:last-child {
+                border-bottom: 0;
+            }
+        }
+        
         .badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 7px;
             border-radius: 3px;
-            font-size: 11px;
+            font-size: clamp(0.65rem, 2vw, 0.6875rem);
             font-weight: 600;
         }
         
@@ -206,38 +341,70 @@
         .info-box {
             background: #eff6ff;
             border-left: 4px solid #3b82f6;
-            padding: 15px;
+            padding: 12px;
             margin: 15px 0;
             border-radius: 4px;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
         }
         
         .info-box h4 {
             color: #1e40af;
             margin-bottom: 8px;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+        }
+        
+        .info-box li {
+            margin: 5px 0;
         }
         
         .warning-box {
             background: #fef3c7;
             border-left: 4px solid #f59e0b;
-            padding: 15px;
+            padding: 12px;
             margin: 15px 0;
             border-radius: 4px;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
         }
         
         .warning-box h4 {
             color: #92400e;
             margin-bottom: 8px;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+        }
+        
+        .warning-box ul {
+            margin-left: 20px;
+        }
+        
+        .warning-box li {
+            margin: 5px 0;
+        }
+        
+        @media (max-width: 640px) {
+            .info-box, .warning-box {
+                padding: 10px;
+            }
+            
+            .info-box ul, .warning-box ul {
+                margin-left: 15px;
+            }
         }
         
         .tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             border-bottom: 2px solid #e5e7eb;
-            margin: 20px 0;
+            margin: 15px 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .tab {
-            padding: 10px 20px;
+            padding: 8px 15px;
             cursor: pointer;
             border: none;
             background: none;
@@ -245,6 +412,8 @@
             font-weight: 500;
             transition: all 0.3s;
             border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
         }
         
         .tab.active {
@@ -254,11 +423,22 @@
         
         .tab-content {
             display: none;
-            padding: 20px 0;
+            padding: 15px 0;
         }
         
         .tab-content.active {
             display: block;
+        }
+        
+        @media (max-width: 640px) {
+            .tabs {
+                gap: 5px;
+            }
+            
+            .tab {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
         }
         
         .toc {
@@ -294,14 +474,34 @@
         .security-note {
             background: #fef2f2;
             border-left: 4px solid #ef4444;
-            padding: 15px;
+            padding: 12px;
             margin: 15px 0;
             border-radius: 4px;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
         }
         
         .security-note h4 {
             color: #991b1b;
             margin-bottom: 8px;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+        }
+        
+        .security-note ul {
+            margin-left: 20px;
+        }
+        
+        .security-note li {
+            margin: 5px 0;
+        }
+        
+        @media (max-width: 640px) {
+            .security-note {
+                padding: 10px;
+            }
+            
+            .security-note ul {
+                margin-left: 15px;
+            }
         }
 
         @media print {
@@ -311,16 +511,19 @@
 </head>
 <body>
     <div class="header">
-        <h1>ZKTeco Device API</h1>
+        <h1>🔐 ZKTeco Device API</h1>
         <p>Complete Flow Documentation & Integration Guide</p>
-        <p style="font-size: 0.9em; margin-top: 10px;">Version 1.0.1 | RESTful API for fingerprint device management and access control</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">Version 1.0.0 | RESTful API for fingerprint device management and access control</p>
     </div>
     
     <div class="container">
         <!-- Navigation -->
         <div class="nav">
-            <h3>📑 Quick Navigation</h3>
-            <div class="nav-links">
+            <div class="nav-header">
+                <h3>📑 Quick Navigation</h3>
+                <button class="nav-toggle" onclick="toggleNav()">☰ Menu</button>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="#overview" class="nav-link">Overview</a>
                 <a href="#architecture" class="nav-link">Architecture</a>
                 <a href="#auth" class="nav-link">Authentication</a>
@@ -410,11 +613,11 @@
                 <div class="mermaid">
 graph TB
     Client[Client Application]
-    API[API Server<br/>Python build]
+    API[CI 4 API Server<br/>Python exe]
     Auth[Auth Service<br/>JWT]
     Queue[Queue System<br/>Bull/Redis]
     Cache[Redis Cache]
-    DB[(PostgreSQL<br/>Database)]
+    DB[(MySQL<br/>Database)]
     Device[ZKTeco Device<br/>Fingerprint Reader]
     
     Client -->|HTTP/REST| API
@@ -553,7 +756,7 @@ sequenceDiagram
                 <h4>Request Body</h4>
                 <div class="code-block">
 <pre>{
-  "email": "danish@example.com",
+  "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcd8ddd2d5cfd4fcd9c4ddd1ccd0d992dfd3d1">[email&#160;protected]</a>",
   "password": "danish123"
 }</pre>
                 </div>
@@ -729,8 +932,8 @@ sequenceDiagram
                 <h4>Request Body</h4>
                 <div class="code-block">
 <pre>{
-  "username": "danish",
-  "email": "danish@example.com",
+  "username": "john_doe",
+  "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ee84818680ae8b968f839e828bc08d8183">[email&#160;protected]</a>",
   "password": "password123",
   "role": "user"
 }</pre>
@@ -746,7 +949,7 @@ sequenceDiagram
   "data": {
     "id": 1,
     "username": "john_doe",
-    "email": "john@example.com",
+    "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="117b7e797f517469707c617d743f727e7c">[email&#160;protected]</a>",
     "role": "user"
   }
 }</pre>
@@ -1330,7 +1533,7 @@ sequenceDiagram
   "data": {
     "device_id": 1,
     "unlock_time": "2024-02-05T14:30:00Z",
-    "unlocked_by": "admin@example.com",
+    "unlocked_by": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8beaefe6e2e5cbeef3eae6fbe7eea5e8e4e6">[email&#160;protected]</a>",
     "auto_lock_in": 5,
     "audit_id": "AUD-20240205-001"
   }
@@ -1504,13 +1707,13 @@ graph LR
         
         <!-- Footer -->
         <div class="section" style="text-align: center; background: #f8fafc;">
-            <p>📚 <strong>MAJ Finger API Documentation</strong></p>
-            <p>Version 1.0.1</p>
-            <p>For API support, contact: <a href="mailto:danishluthfim@gmail.com">danishluthfim@gmail.com</a></p>
+            <p>📚 <strong>ZKTeco Device API Documentation</strong></p>
+            <p>Version 1.0.0 | Generated on 2024-02-05</p>
+            <p>For API support, contact: <a href="/cdn-cgi/l/email-protection#03707673736c7177437a6c7671606c6e73626d7a2d606c6e"><span class="__cf_email__" data-cfemail="d6a5a3a6a6b9a4a296afb9a3a4b5b9bba6b7b8aff8b5b9bb">[email&#160;protected]</span></a></p>
         </div>
     </div>
     
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         mermaid.initialize({ 
             startOnLoad: true,
             theme: 'default',
@@ -1538,9 +1741,14 @@ graph LR
                 tab.classList.remove('active');
             });
             
-            // Show selected tab
+             // Show selected tab
             document.getElementById(sectionPrefix + tabId).classList.add('active');
             event.target.classList.add('active');
+        }
+        
+        function toggleNav() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
         }
         
         // Smooth scroll for navigation
@@ -1553,8 +1761,30 @@ graph LR
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    
+                    // Close mobile menu after clicking a link
+                    if (window.innerWidth <= 768) {
+                        const navLinks = document.getElementById('navLinks');
+                        navLinks.classList.remove('active');
+                    }
                 }
             });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('.nav');
+            const navLinks = document.getElementById('navLinks');
+            const navToggle = document.querySelector('.nav-toggle');
+            
+            if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
+                if (!nav.contains(event.target) || event.target === navToggle) {
+                    return;
+                }
+                if (!navLinks.contains(event.target) && !navToggle.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                }
+            }
         });
     </script>
 </body>
